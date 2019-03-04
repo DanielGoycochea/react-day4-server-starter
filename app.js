@@ -8,6 +8,7 @@ const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
+const cors         = require('cors')
 
 
 // WHEN INTRODUCING USERS DO THIS:
@@ -36,6 +37,10 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 const app = express();
 
 // Middleware Setup
+app.use(cors({
+  credentials:true,
+  origin:["http://localhost:3001"]//yo cerveso
+}))
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -74,5 +79,10 @@ app.locals.title = 'Express - Generated with IronGenerator';
 const index = require('./routes/index');
 app.use('/', index);
 
+const apis =require ('./routes/project-routes');
+app.use("/api",apis);
+
+const taskRoutes = require("./routes/task-routes");
+app.use("/api", taskRoutes);
 
 module.exports = app;
